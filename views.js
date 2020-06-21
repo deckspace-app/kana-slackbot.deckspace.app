@@ -45,6 +45,70 @@ const modal = syllabary => {
   };
 };
 
+const updateIncorrect = (body, context) => {
+  const {blocks, title} = body.view;
+  const buttonsIndex = blocks.findIndex(block => block.type == 'actions');
+  const buttons = blocks[buttonsIndex];
+  const clickedButton = buttons.elements.findIndex(
+    button => button.action_id == context.actionIdMatches[0],
+  );
+  const {text} = buttons.elements[clickedButton].text;
+
+  blocks[0] = {
+    type: 'image',
+    image_url: body.view.blocks[0].image_url,
+    alt_text: body.view.blocks[0].alt_text,
+  };
+  blocks[buttonsIndex].elements[clickedButton].style = 'danger';
+  blocks[buttonsIndex].elements[clickedButton].text.text = `❌ ${text}`;
+
+  return {
+    type: 'modal',
+    title,
+    blocks,
+  };
+};
+
+const updateCorrect = (body, context) => {
+  const {blocks, title} = body.view;
+  const buttonsIndex = blocks.findIndex(block => block.type == 'actions');
+  const buttons = blocks[buttonsIndex];
+  const clickedButton = buttons.elements.findIndex(
+    button => button.action_id == context.actionIdMatches[0],
+  );
+  const {text} = buttons.elements[clickedButton].text;
+
+  blocks[0] = {
+    type: 'image',
+    image_url: body.view.blocks[0].image_url,
+    alt_text: body.view.blocks[0].alt_text,
+  };
+  blocks[buttonsIndex].elements[clickedButton].style = 'primary';
+  blocks[buttonsIndex].elements[clickedButton].text.text = `✅ ${text}`;
+
+  return {
+    type: 'modal',
+    title,
+    blocks,
+  };
+};
+
+const updateModal = (action, body, context) => {
+  switch (action) {
+    case 'incorrect':
+      return updateIncorrect(body, context);
+      break;
+    case 'correct':
+      return updateCorrect(body, context);
+      break;
+    case 'nextCharacter':
+      return {}; // TODO
+      break;
+    default:
+      console.log('no action defined in updateModal');
+  }
+};
+
 const hiraganaModal = () => modal('hiragana');
 const katakanaModal = () => modal('katakana');
 const bothModal = () =>
@@ -54,4 +118,5 @@ module.exports = {
   hiraganaModal,
   katakanaModal,
   bothModal,
+  updateModal,
 };
