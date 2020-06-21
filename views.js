@@ -7,7 +7,7 @@ const modal = syllabary => {
     correct: true,
   };
   const wrongCharacters = characters
-    .filter(c => c !== character)
+    .filter(c => c !== character.label)
     .map(c => {
       return {label: c, correct: false};
     });
