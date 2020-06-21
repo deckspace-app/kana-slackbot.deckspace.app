@@ -2,34 +2,42 @@ const characters = require('./syllabary');
 const _ = require('lodash');
 
 const modal = syllabary => {
-  const character = characters[Math.floor(Math.random() * characters.length)];
-  const wrongCharacters = characters.filter(c => c !== character);
+  const character = {
+    label: characters[Math.floor(Math.random() * characters.length)],
+    correct: true,
+  };
+  const wrongCharacters = characters
+    .filter(c => c !== character)
+    .map(c => {
+      return {label: c, correct: false};
+    });
   const buttons = _.shuffle([character, ..._.sampleSize(wrongCharacters, 3)]);
-  console.log(buttons);
 
   return {
     type: 'modal',
     title: {
       type: 'plain_text',
-      text: `Practicing: ${syllabary}`,
+      text: `Practicing: ${_.capitalize(syllabary)}`,
     },
     blocks: [
       {
         type: 'image',
-        image_url: `https://kana-slackbot.deckspace.vercel.app/${syllabary}/${character}.png`,
-        alt_text: character,
+        image_url: `https://kana-slackbot.deckspace.vercel.app/${syllabary}/${character.label}.png`,
+        alt_text: character.label,
       },
       {
         type: 'actions',
-        elements: buttons.map(button => {
+        elements: buttons.map((button, index) => {
           return {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: button,
+              text: button.label,
               emoji: true,
             },
-            action_id: `answer_${button}`,
+            action_id: button.correct
+              ? `correct_answer_${character.label}`
+              : `incorrect_answer_${index}_${character.label}`,
           };
         }),
       },

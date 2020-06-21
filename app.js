@@ -8,6 +8,16 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
+app.action(/^correct_answer_.*$/, async({context, body, ack}) => {
+  await ack();
+  console.log(body);
+});
+
+app.action(/^incorrect_answer_.*$/, async({context, body, ack}) => {
+  await ack();
+  console.log(body);
+});
+
 app.action('study_hiragana', async ({context, body, ack, say}) => {
   console.log('study_hiragana fired');
   await ack();
