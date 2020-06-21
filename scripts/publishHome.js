@@ -34,7 +34,6 @@ const homeLayout = {
               text: 'ひらがな Hiragana',
               emoji: true,
             },
-            style: 'primary',
             action_id: 'study_hiragana',
           },
           {
@@ -50,7 +49,7 @@ const homeLayout = {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: '双方 Both',
+              text: '双方 Blended',
               emoji: true,
             },
             action_id: 'study_both',

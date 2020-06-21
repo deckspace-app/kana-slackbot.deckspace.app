@@ -93,6 +93,22 @@ const updateCorrect = (body, context) => {
   };
 };
 
+const updateNextCharacter = (body, context) => {
+  switch (body.view.title.text) {
+    case 'Practicing: Katakana':
+      return modal('katakana');
+      break;
+    case 'Practicing: Hiragana':
+      return modal('hiragana');
+      break;
+    case 'Practicing: Blended':
+      return bothModal();
+      break;
+    default:
+      console.log('invalid case please check modal title');
+  }
+};
+
 const updateModal = (action, body, context) => {
   switch (action) {
     case 'incorrect':
@@ -102,7 +118,7 @@ const updateModal = (action, body, context) => {
       return updateCorrect(body, context);
       break;
     case 'nextCharacter':
-      return {}; // TODO
+      return updateNextCharacter(body, context);
       break;
     default:
       console.log('no action defined in updateModal');
@@ -111,8 +127,12 @@ const updateModal = (action, body, context) => {
 
 const hiraganaModal = () => modal('hiragana');
 const katakanaModal = () => modal('katakana');
-const bothModal = () =>
-  Math.round(Math.random()) ? modal('hiragana') : modal('katakana');
+const bothModal = () => {
+  const syllabary = Math.round(Math.random()) ? 'hiragana' : 'katakana';
+  const m = modal(syllabary);
+  m.title.text = 'Practicing: Blended';
+  return m;
+};
 
 module.exports = {
   hiraganaModal,

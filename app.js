@@ -22,7 +22,13 @@ app.action(/^correct_answer_.*$/, async ({context, body, ack}) => {
       view_id: body.view.id,
       view: updateModal('correct', body, context),
     });
-    console.log(result);
+    setTimeout(async () => {
+      await app.client.views.update({
+        token: context.botToken,
+        view_id: body.view.id,
+        view: updateModal('nextCharacter', body, context),
+      });
+    }, 200);
   } catch (error) {
     console.error(error);
   }
