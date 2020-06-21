@@ -16,7 +16,7 @@ app.action('study_hiragana', async ({context, body, ack, say}) => {
     const result = await app.client.views.open({
       token: context.botToken,
       trigger_id: body.trigger_id,
-      view: hiraganaModal,
+      view: hiraganaModal(),
     });
     console.log(result);
   } catch (error) {
@@ -31,7 +31,7 @@ app.action('study_katakana', async ({context, body, ack, say}) => {
     const result = await app.client.views.open({
       token: context.botToken,
       trigger_id: body.trigger_id,
-      view: katakanaModal,
+      view: katakanaModal(),
     });
     console.log(result);
   } catch (error) {
@@ -46,7 +46,7 @@ app.action('study_both', async ({context, body, ack, say}) => {
     const result = await app.client.views.open({
       token: context.botToken,
       trigger_id: body.trigger_id,
-      view: bothModal,
+      view: bothModal(),
     });
     console.log(result);
   } catch (error) {

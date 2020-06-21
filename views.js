@@ -1,119 +1,46 @@
-const hiraganaModal = {
-  type: 'modal',
-  title: {
-    type: 'plain_text',
-    text: 'Practicing: Hiragana'
-  },
-  blocks: [
-    {
-      type: 'image',
-      image_url:
-        'https://1jp.tokyo/hiragana/gyousyo/27-4-hi-mouhitu-hiragana-mihon.jpg',
-      alt_text: 'inspiration',
-    },
-    {
-      type: 'actions',
-      elements: [
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'hi',
-            emoji: true,
-          },
-          value: 'answer_hi',
-        },
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'ra',
-            emoji: true,
-          },
-          value: 'answer_ra',
-        },
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'ga',
-            emoji: true,
-          },
-          value: 'answer_ga',
-        },
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'na',
-            emoji: true,
-          },
-          value: 'answer_na',
-        },
-      ],
-    },
-  ],
-}
+const characters = require('./syllabary');
+const _ = require('lodash');
 
+const modal = syllabary => {
+  const character = characters[Math.floor(Math.random() * characters.length)];
+  const wrongCharacters = characters.filter(c => c !== character);
+  const buttons = _.shuffle([character, ..._.sampleSize(wrongCharacters, 3)]);
+  console.log(buttons);
 
-const katakanaModal = {
-  type: 'modal',
-  title: {
-    type: 'plain_text',
-    text: 'Practicing: Katakana'
-  },
-  blocks: [
-    {
-      type: 'image',
-      image_url:
-        'https://1jp.tokyo/hiragana/gyousyo/27-4-hi-mouhitu-hiragana-mihon.jpg',
-      alt_text: 'inspiration',
+  return {
+    type: 'modal',
+    title: {
+      type: 'plain_text',
+      text: `Practicing: ${syllabary}`,
     },
-    {
-      type: 'actions',
-      elements: [
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'hi',
-            emoji: true,
-          },
-          value: 'answer_hi',
-        },
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'ra',
-            emoji: true,
-          },
-          value: 'answer_ra',
-        },
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'ga',
-            emoji: true,
-          },
-          value: 'answer_ga',
-        },
-        {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'na',
-            emoji: true,
-          },
-          value: 'answer_na',
-        },
-      ],
-    },
-  ],
-}
+    blocks: [
+      {
+        type: 'image',
+        image_url: `https://kana-slackbot.deckspace.vercel.app/${syllabary}/${character}.png`,
+        alt_text: character,
+      },
+      {
+        type: 'actions',
+        elements: buttons.map(button => {
+          return {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: button,
+              emoji: true,
+            },
+            action_id: `answer_${button}`,
+          };
+        }),
+      },
+    ],
+  };
+};
 
-const bothModal = katakanaModal;
+const hiraganaModal = () => modal('hiragana');
+const katakanaModal = () => modal('katakana');
+const bothModal = () =>
+  Math.round(Math.random()) ? modal('hiragana') : modal('katakana');
 
 module.exports = {
   hiraganaModal,
