@@ -65,7 +65,7 @@ const publishHome = () => {
     method: 'POST',
     url: 'https://slack.com/api/views.publish',
     headers: {
-      Authorization: `Bearer xoxb-1195640114003-1219380455728-hQ4PhmFYcEJdjCw9c8vx5qK3`,
+      Authorization: `Bearer ${token}`,
     },
     json: true,
     body: homeLayout,
